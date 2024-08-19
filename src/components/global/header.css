@@ -1,0 +1,35 @@
+.header {
+    width: 100%;
+    height: 10vh;
+    background-color: var(--primary-color)
+}
+.header-items {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.corner {
+    display: flex;
+    align-items: center;
+    padding-right: 3%;
+}
+
+.nav-links span {
+    cursor: pointer;
+}
+.headerSpan {
+    white-space: nowrap;
+    color: white;
+}
+.nav-links > * {
+    padding-right: 10%;
+}
+
+.nav-links {
+    padding-left: 5%;
+    display: flex;
+    align-items: center;
+
+}
+

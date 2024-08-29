@@ -1,10 +1,9 @@
-
 .card {
     height: 11%;
     width: 100%;
     display: flex;
     background-color: var(--primary-color);
-    box-shadow:  3px 4px 10px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: 3px 4px 10px 1px rgba(0, 0, 0, 0.2);
 }
 
 .adjectives {
@@ -12,25 +11,23 @@
     width: 60%;
     display: flex;
     flex-direction: column;
+    
 }
+
 .logo {
     width: 10%;
     height: 100%;
 }
-.title span {
+
+.title {
     font-size: xx-large;
     color: white;
 }
-.adjectives > div {
-    margin-top: auto;
-    padding: 2px;
+
+.description {
+    color: var(--footer-color);
 }
-.description span {
-    color:  var(--footer-color)
-}   
-span {
-    white-space: nowrap;
-}
+
 .arrow {
     flex: 1;
     text-align: center;
@@ -38,15 +35,10 @@ span {
     margin-top: auto;
     margin-bottom: auto;
 }
-.arrow i {
-    color: white;
-    font-size: larger;
-    transition: transform 0.3s ease-in-out;
-}
-.arrow i.chevron-down {
-    transform: rotate(-90deg);
+
+
+.arrow-icon.chevron-down {
+    transform: rotate(360deg);
 }
 
-  
-  
   

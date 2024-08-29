@@ -1,10 +1,11 @@
-import  React from 'react';
+
 import '../../components/global/global.css'
 import MainModel from '../../components/mainModel/mainmodel';
 import RequestCardHeader from '../../components/requestCardHeader/requestCardHeader';
 
 import './home.css'
 function Home() {
+
   const applicationCards = [
     {
       title: 'Request for a New Application', 

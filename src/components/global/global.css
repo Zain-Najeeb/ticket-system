@@ -2,7 +2,9 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"); 
 
 :root {
-    --primary-color: rgb(25, 70, 231);
+    --primary-color: rgb(25, 118, 210); 
+    --secondary-color: beige; 
+    --hover-color: #246fba ; 
     --footer-color: rgb(143, 143, 143);
 }
 body {

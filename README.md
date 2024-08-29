@@ -1,1 +1,1 @@
-This is the front end of my typescript, React App and express. Run this in tangent with the server to get the full experience
+This is the front end of my typescript, React App that uses express and redis. Run this in tangent with the server to get the full experience

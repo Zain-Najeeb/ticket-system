@@ -30,6 +30,7 @@
 }
 .nav-links > * {
     padding-right: 10%;
+    text-decoration: none;
 }
 
 .nav-links {

@@ -5,6 +5,8 @@ import HandleApiCall from '../handleApiCall';
 interface Session {
     email: string;
     username: string;
+    role: string; 
+    isAuthenticated: boolean;
 }
 
 interface SessionContextType {
@@ -38,7 +40,7 @@ export const SessionProvider = ({ children }: { children: ReactNode }) => {
                     navigate('/login');
                 } 
             } else if (data && data.body && data.body.isAuthenticated) {
-                setSession({ email: data.body.email, username: data.body.username });
+                setSession({ email: data.body.email, username: data.body.username, role: data.body.role,  isAuthenticated: data.body.isAuthenticated });
                 if (location.pathname === '/login' || location.pathname === '/signup') {
                     navigate('/home')
                 }

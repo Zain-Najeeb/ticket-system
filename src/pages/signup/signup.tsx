@@ -1,69 +1,107 @@
-import React, { useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
+import { useSession } from '../../context/session';
 import { Box, Typography, TextField, Button, Checkbox, FormControlLabel, Link } from '@mui/material';
+import React, { useState } from 'react';
 import MainModel from '../../components/mainModel/mainmodel';
 import './signup.css';
+
+import HandleApiCall from '../../handleApiCall';
 
 function Signup() {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [reverifyPassword, setReverifyPassword] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
   const [isAnalyst, setIsAnalyst] = useState(false);
   const navigate = useNavigate();
+  const { setSession } = useSession();
+  
   const [errors, setErrors] = useState({
     email: false,
     username: false,
     password: false,
     reverifyPassword: false,
-    phoneNumber: false,
+    emailUnique: false,
+    usernameUnique: false,
   });
 
-  const handleCreateAccount = () => {
-    setErrors({
+  const handleCreateAccount = async () => {
+    setErrors(prevErrors => ({
       email: !email,
       username: !username,
       password: !password,
       reverifyPassword: !reverifyPassword || password !== reverifyPassword,
-      phoneNumber: !phoneNumber,
-    });
+      emailUnique: false,
+      usernameUnique: false,
+    }));
 
-    if (!email || !username || !password || !reverifyPassword || !phoneNumber || password !== reverifyPassword) {
+    if (!email || !username || !password || !reverifyPassword || password !== reverifyPassword) {
       return;
     }
+    
+    const body = {
+      email: email, 
+      isAuthenticated: true, 
+      username: username, 
+      password: password, 
+      role: isAnalyst ? 'pending' : 'user'
+    };
+    
+    try {
+      const data = await HandleApiCall({ route: 'auth/signup', method: 'POST', body: body });
+      setErrors(prevErrors => ({
+        ...prevErrors,
+        emailUnique: false,
+        usernameUnique: false
+      }));
+
+      if (data.errors) {
+        const error = data.errors[0];
+        setErrors(prevErrors => ({
+          ...prevErrors,
+          emailUnique: error === 'Email is already in use',
+          usernameUnique: error === 'Username is already in use'
+        }));
+      } else {
+        setSession(body);
+        navigate('/home')
+      }
+    } catch (error) {
+      console.error('Error during signup:', error);
+    }
+  };
+
+  const handleFieldChange = (field: string, setter: React.Dispatch<React.SetStateAction<string>>) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setter(e.target.value);
+    setErrors(prevErrors => ({
+      ...prevErrors,
+      [field]: false,
+      [`${field}Unique`]: false
+    }));
   };
 
   return (
     <div className="main-content">
-      <MainModel title="Create New Account">
+      <MainModel title="Create a New Account">
         <Box className="model_content" sx={{ p: 3, display: 'flex', flexDirection: 'column', gap: 2 }}>
           <TextField
             label="Email"
             variant="outlined"
             fullWidth
-            error={errors.email}
-            helperText={errors.email && "Email is required"}
+            error={errors.email || errors.emailUnique}
+            helperText={errors.email ? "Email is required" : (errors.emailUnique ? "Email is already in use" : "")}
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleFieldChange('email', setEmail)}
           />
           <TextField
             label="Username"
             variant="outlined"
             fullWidth
-            error={errors.username}
-            helperText={errors.username && "Username is required"}
+            error={errors.username || errors.usernameUnique}
+            helperText={errors.username ? "Username is required" : (errors.usernameUnique ? "Username is already in use" : "")}
             value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <TextField
-            label="Phone Number"
-            variant="outlined"
-            fullWidth
-            error={errors.phoneNumber}
-            helperText={errors.phoneNumber && "Phone number is required"}
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
+            onChange={handleFieldChange('username', setUsername)}
           />
           <TextField
             label="Password"
@@ -85,7 +123,6 @@ function Signup() {
             value={reverifyPassword}
             onChange={(e) => setReverifyPassword(e.target.value)}
           />
-
           <FormControlLabel
             control={
               <Checkbox

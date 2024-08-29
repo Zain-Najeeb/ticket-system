@@ -4,11 +4,12 @@ import { useSession } from '../../context/session';
 import { useState, useEffect } from 'react';
 import HandleApiCall from '../../handleApiCall';
 function Header() {
-    const { session } = useSession();
+    const { session, clearSession } = useSession();
     const navigate = useNavigate();
     const [isDropdownVisible, setDropdownVisible] = useState(false);
     const handleLogout = async () => {
-        await HandleApiCall({route: 'auth/logout', method: 'POST', body: {}})
+        clearSession();
+        await HandleApiCall({ route: 'auth/logout', method: 'POST', body: {} })
         navigate('/login')
     }
     const handleToggleDropdown = () => {
@@ -18,7 +19,7 @@ function Header() {
     const handleOutsideClick = (e: MouseEvent) => {
         const target = e.target as Node;
         if (!document.querySelector('.corner')?.contains(target)) {
-          setDropdownVisible(false);
+            setDropdownVisible(false);
         }
     };
 
@@ -39,9 +40,17 @@ function Header() {
                     <Link to='home'>
                         <span className='headerSpan'>My Requests</span>
                     </Link>
-                    <Link to="areq">
-                        <span className='headerSpan'>All Requests</span>
-                    </Link>
+
+                    {(session?.role === 'administrator' || session?.role === 'verified') && (
+                        <Link to="areq">
+                            <span className='headerSpan'>All Requests</span>
+                        </Link>
+                    )}
+                    {(session?.role === 'administrator' || session?.role === 'pending') && (
+                        <Link to="areq">
+                            <span className='headerSpan'>Analyst Status</span>
+                        </Link>
+                    )}
                 </div>
                 <div className="corner" onClick={handleToggleDropdown}>
                     <span className='headerSpan'>

@@ -1,7 +1,6 @@
 import './login.css';
 import HandleApiCall from '../../handleApiCall';
 import { useSession } from '../../context/session';
-import { setUser } from '../../context/localStorage';
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Link } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
@@ -21,15 +20,14 @@ function Login() {
     try {
       const data = await HandleApiCall({ route: 'auth/login', method: 'POST', body: body });
       if (data && data.body && data.body.isAuthenticated) {
-        const user = setUser({ email: data.body.email, username: data.body.username });
-        setSession(user);
+        setSession(data.body);
         navigate('/home');
       } else {
-        setError('Incorrect email or password'); // Set error message if login fails
+        setError('Incorrect email or password'); 
       }
     } catch (err) {
       console.error('Error during login:', err);
-      setError('An error occurred. Please try again.'); // Handle any errors that occur during the API call
+      setError('An error occurred. Please try again.'); 
     }
   };
 
